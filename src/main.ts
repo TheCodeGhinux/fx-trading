@@ -1,8 +1,10 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ResponseInterceptor } from './common/response.interceptor';
+import { ValidationExceptionFilter } from './common/validation-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -17,6 +19,8 @@ async function bootstrap() {
     exclude: ['/', 'health', 'api', 'api/v1', 'api/docs', 'probe'],
   });
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new ResponseInterceptor(app.get(Reflector)));
+  app.useGlobalFilters(new ValidationExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Fx Forage API Documentation')
