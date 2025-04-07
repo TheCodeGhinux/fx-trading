@@ -9,9 +9,20 @@ import { TradesModule } from './modules/trades/trades.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { WalletModule } from './modules/wallet/wallet.module';
 import dataSource from 'src/database/data-source';
+import { ConfigModule } from '@nestjs/config';
+import authConfig from './config/auth.config';
+import { validateEnv } from './common/env.validator';
+import { TokenService } from './common/token.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forRootAsync({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: validateEnv,
+      load: [authConfig],
+    }),
+    TypeOrmModule.forRootAsync({
     useFactory: () => ({
       ...dataSource.options,
     }),
@@ -21,8 +32,21 @@ import dataSource from 'src/database/data-source';
       }
       return dataSource;
     },
-  }), AuthModule, UserModule, WalletModule, TransactionModule, TradesModule, ExchangeModule],
+  }),
+  AuthModule, UserModule, WalletModule, TransactionModule, TradesModule, ExchangeModule],
   controllers: [AppController],
-  providers: [AppService, Logger],
+  providers: [
+    AppService,
+    Logger,
+    JwtService,
+  //   {
+  //   provide: APP_GUARD,
+  //   useClass: AuthGuard,
+  // },
+    {
+      provide: TokenService,
+      useClass: TokenService,
+    },
+],
 })
 export class AppModule {}

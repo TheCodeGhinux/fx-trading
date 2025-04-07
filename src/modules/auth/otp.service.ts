@@ -2,11 +2,18 @@
 import { Injectable } from '@nestjs/common';
 import { OtpRepository } from '../user/repositories/otp.repository';
 import { EntityManager } from 'typeorm';
+import { Otp } from '../user/entities/otp.entity';
+
+export interface JwtPayload {
+  sub: string;
+  email: string;
+  exp: number;
+}
 
 @Injectable()
 export class OtpService {
   constructor(
-    private readonly otpRepository: OtpRepository,
+    public readonly otpRepository: OtpRepository,
     private readonly entityManager: EntityManager,
   ) {}
   
@@ -31,7 +38,7 @@ export class OtpService {
     });
   }
 
-  async validateOtp(email: string, code: string): Promise<boolean> {
+  async validateOtp(email: string, code: string): Promise<{ valid: boolean, otp?: Otp }> {
     const otp = await this.otpRepository.get(
       { email },
       { order: { createdAt: 'DESC' } }
@@ -39,22 +46,20 @@ export class OtpService {
 
     if (!otp || otp.code !== code) {
       await this.incrementAttempts(otp?.id);
-      return false;
+      return { valid: false };
     }
 
     if (new Date() > otp.expiresAt) {
       await this.otpRepository.delete({
         identifierOptions: { id: otp.id },
         transactionOptions: { useTransaction: false },
-    });
-      return false;
+      });
+      return { valid: false };
     }
 
-    await this.otpRepository.delete({
-      identifierOptions: { id: otp.id },
-      transactionOptions: { useTransaction: false }, });
-    return true;
+    return { valid: true, otp };
   }
+
 
   private async incrementAttempts(otpId?: string) {
     if (otpId) {
