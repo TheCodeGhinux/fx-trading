@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from '../user/dto/create-user.dto';
 import { AuthDocs } from './docs/auth.docs';
 import { VerifyEmailDto } from './dto/auth.dto';
 
@@ -15,6 +15,13 @@ export class AuthController {
   register(@Body() payload: CreateUserDto) {
     return this.authService.registerUser(payload);
   }
+
+  @Post('login')
+  loginUser(@Body() payload: LoginUserDto) {
+    return this.authService.loginUser(payload);
+  }
+
+
 
   @Post('verify-email')
   async verifyEmail(@Body() payload: VerifyEmailDto) {
