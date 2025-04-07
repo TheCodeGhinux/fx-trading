@@ -1,4 +1,5 @@
 export const USER_LOGIN_SUCCESSFULLY = 'User logged in successfully';
+export const WALLET_FUNDED = 'Wallet funded succesfully';
 export const USER_CREATION_FAILED = 'User creation failed';
 export const USER_NOT_AUTHORIZED =
   'User is not authorized to perform this action';
@@ -65,6 +66,5 @@ export const LOGIN_ERROR = 'An error occurred during login';
 export const INVALID_LOGIN_CREDENTIALS = 'Invalid Email or Password';
 
 export const INVALID_PARAMETER = (param: string) => `${param} is required`;
-export const RESOURCE_NOT_FOUND = (resource: string) => `${resource} not found`;
 export const FORBIDDEN_ACTION = 'Access to this resource is forbidden';
 
