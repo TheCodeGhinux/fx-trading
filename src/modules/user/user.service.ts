@@ -20,10 +20,14 @@ export class UserService {
 
 async findUserByIdentifier<K extends UserIdentifierType>(
   identifierType: K, 
-  identifier: UserIdentifierMap[K]
+  identifier: UserIdentifierMap[K],
+  queryOptions?: object,
+  relations?: object,
 ) {
   const query = { [identifierType]: identifier };
-  const user = await this.userRepository.get(query);
+
+
+  const user = await this.userRepository.get(query, queryOptions, relations);
   
   if (!user) {
     throw new CustomHttpException(
@@ -36,12 +40,27 @@ async findUserByIdentifier<K extends UserIdentifierType>(
 }
 
   async getUser(id: string) {
-    const user = await this.findUserByIdentifier('id', id)
+    const user = await this.findUserByIdentifier(
+      'id',
+      id,
+      {},
+      { wallets: true },
+    );
+
     return {
       message: SYS_MSG.RESOURCE_FETCHED('User'),
-      data: user
-    }
+      data: user,
+    };
   }
+
+  // async getUser(id: string) {
+  //   const user = await this.findUserByIdentifier('id', id, {}, { relations: ['wallets'] })
+  //   return {
+  //     message: SYS_MSG.RESOURCE_FETCHED('User'),
+  //     data: user
+  //   }
+  // }
+
 
   async updateUser(updateData: any, id: string) {
     await this.findUserByIdentifier('id', id)

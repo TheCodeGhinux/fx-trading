@@ -4,6 +4,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthDocs } from './docs/auth.docs';
+import { VerifyEmailDto } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,4 +15,10 @@ export class AuthController {
   register(@Body() payload: CreateUserDto) {
     return this.authService.registerUser(payload);
   }
+
+  @Post('verify-email')
+  async verifyEmail(@Body() payload: VerifyEmailDto) {
+    return this.authService.verifyEmail(payload);
+  }
+
 }
