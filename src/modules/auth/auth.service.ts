@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { hash } from 'bcryptjs';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UserService } from '../user/user.service';
+import { EntityManager } from 'typeorm';
+import { CreateUserRecordOptions } from '../user/interfaces/user.inteface';
+import { CustomHttpException } from 'src/common/custom.exception';
+import * as SYS_MSG from 'src/common/system-messages'
+import { OtpService } from './otp.service';
+import { JwtService } from '@nestjs/jwt';
+import { VerifyEmailDto } from './dto/auth.dto';
+import { Currency } from '../wallet/entities/wallet.entity';
+import { WalletService } from '../wallet/wallet.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private readonly userService: UserService,
+    private readonly otpService: OtpService,
+    private readonly jwtService: JwtService,
+    private readonly entityManager: EntityManager,
+  ) {
   }
+  async registerUser(payload: CreateUserDto) {
+    return this.entityManager.transaction(async (transactionManager) => {
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+      const {email, password, first_name, last_name} = payload
+      const existingUser = await this.userService.findUserByIdentifier('email', email)
+      if (existingUser) {
+        throw new CustomHttpException(SYS_MSG.RESOURCE_EXISTS('User'), HttpStatus.BAD_REQUEST)
+      };
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+      const hashedPassword = await hash(password, 10);
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+      const createPayload = {
+        email: email,
+        password: hashedPassword,
+        first_name,
+        last_name,
+        is_verified: false,
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+      const createUserPayload: CreateUserRecordOptions = {
+        createPayload, transactionOptions: { useTransaction: true, transaction: transactionManager }
+      }
+      const user = await this.userService.createUser(createUserPayload);
+      const verificationToken = this.jwtService.sign(
+        { email, purpose: 'verify-email' },
+        { expiresIn: '1hr' },
+      );
+      await this.otpService.generateAndSendOtp(user.email);
+
+      return { message: SYS_MSG.RESOURCE_CREATED('User'), data: {toke: verificationToken, user}};
+    });
   }
 }

@@ -2,8 +2,9 @@ import { AbstractBaseEntity } from "src/entities/base.entity";
 import { Trade } from "src/modules/trades/entities/trade.entity";
 import { Transactions } from "src/modules/transaction/entities/transaction.entity";
 import { Wallet } from "src/modules/wallet/entities/wallet.entity";
-import { Column, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 
+@Entity('users')
 export class User extends AbstractBaseEntity {
   @Column({ nullable: false })
   email: string
@@ -13,6 +14,9 @@ export class User extends AbstractBaseEntity {
 
   @Column({ nullable: false })
   last_name: string
+
+  @Column({ nullable: false })
+  password: string
 
   @Column({ name: 'is_email_verified', default: false })
   is_verified: boolean;
