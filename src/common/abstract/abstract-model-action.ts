@@ -4,6 +4,7 @@ import {
   ObjectLiteral,
   DeepPartial,
   FindOptionsWhere,
+  EntityManager,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import {
@@ -81,6 +82,20 @@ export abstract class AbstractModelAction<T extends ObjectLiteral>
     relations?: object,
   ): Promise<T | null> {
     return await this.repository.findOne({
+      where: getRecordIdentifierOptions,
+      ...queryOptions,
+      relations,
+    });
+  }
+  async getWithManager(
+    transactionManager: EntityManager,
+    getRecordIdentifierOptions: object,
+    queryOptions?: object,
+    relations?: object,
+  ): Promise<T | null> {
+    const repo = transactionManager.getRepository(this.repository.target);
+
+    return await repo.findOne({
       where: getRecordIdentifierOptions,
       ...queryOptions,
       relations,
