@@ -33,3 +33,20 @@ export class CreateUserDto {
   @IsStrongPassword()
   password: string
 }
+
+export class LoginUserDto {
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'User email address',
+  })
+  @IsString()
+  email: string
+
+  @ApiProperty({
+    example: 'StrongP@ssw0rd',
+    description:
+      'User password',
+  })
+  @IsString()
+  password: string
+}

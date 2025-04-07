@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { hash } from 'bcryptjs';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { CreateUserDto, LoginUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/user.service';
 import { EntityManager } from 'typeorm';
 import { CreateUserRecordOptions } from '../user/interfaces/user.inteface';
@@ -12,7 +12,7 @@ import { VerifyEmailDto } from './dto/auth.dto';
 import { Currency } from '../wallet/entities/wallet.entity';
 import { WalletService } from '../wallet/wallet.service';
 import { User } from '../user/entities/user.entity';
-import authConfig from 'src/config/auth.config';
+import * as bcrypt from 'bcryptjs'
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,6 @@ export class AuthService {
   }
   async registerUser(payload: CreateUserDto) {
     return this.entityManager.transaction(async (transactionManager) => {
-      console.log("Secret key: ", authConfig().jwtSecret)
 
       const {email, password, first_name, last_name} = payload
       const existingUser = await this.userService.userRepository.get({email})
@@ -56,6 +55,34 @@ export class AuthService {
 
       return { message: SYS_MSG.RESOURCE_CREATED('User'), data: {token: verificationToken, user}};
     });
+  }
+
+
+
+  async loginUser(payload: LoginUserDto) {
+    const user = await this.validateUser(payload)
+    const token = await this.generateToken(user)
+
+    return {
+      message: SYS_MSG.USER_LOGIN_SUCCESSFULLY,
+      data: {token, user}
+    }
+
+
+  }
+
+  async validateUser(payload: LoginUserDto): Promise<User> {
+    const { email, password } = payload
+    const user = await this.userService.findUserByIdentifier('email', email, {}, {wallets: true});
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new CustomHttpException(
+        SYS_MSG.INVALID_LOGIN_CREDENTIALS,
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    return user;
   }
 
   async verifyEmail(payload: VerifyEmailDto) {
@@ -107,6 +134,11 @@ export class AuthService {
         });
       }
     }
+  }
+
+  private generateToken(user: User): string {
+    const payload = { id: user.id, sub: user.id, email: user.email };
+    return this.jwtService.sign(payload);
   }
 
 }
