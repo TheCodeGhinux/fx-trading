@@ -16,7 +16,7 @@ const dataSource = new DataSource({
   entities: [process.env.DB_ENTITIES!],
   migrations: [process.env.DB_MIGRATIONS!],
   namingStrategy: new SnakeNamingStrategy(),
-  synchronize: false,
+  synchronize: true,
   migrationsTableName: 'migrations',
   ssl: process.env.DB_SSL === 'true',
 });
