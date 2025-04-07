@@ -14,6 +14,8 @@ import authConfig from './config/auth.config';
 import { validateEnv } from './common/env.validator';
 import { TokenService } from './common/token.service';
 import { JwtService } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './modules/auth/auth.guard';
 
 @Module({
   imports: [
@@ -39,10 +41,10 @@ import { JwtService } from '@nestjs/jwt';
     AppService,
     Logger,
     JwtService,
-  //   {
-  //   provide: APP_GUARD,
-  //   useClass: AuthGuard,
-  // },
+    {
+    provide: APP_GUARD,
+    useClass: AuthGuard,
+  },
     {
       provide: TokenService,
       useClass: TokenService,
