@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-// import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { User } from '../user/entities/user.entity';
 import { CurrentUser } from 'src/decorators/current-user.decorator';

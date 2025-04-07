@@ -37,13 +37,6 @@ export class WalletService {
     return wallet;
   }
 
-
-  // Lock wallet to prevent concurrent updates
-  // const wallet = await transactionManager.getRepository(this.model).findOne({
-  //   where: { user_id: user.id, currency: payload.currency },
-  //   lock: { mode: 'pessimistic_write' }
-  // });
-
   async fundWallet(user: User, payload: FundWalletDto) {
     return this.entityManager.transaction(async (transactionManager) => {
       try {
