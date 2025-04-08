@@ -29,6 +29,7 @@ export class TransactionService {
     metadata: Record<string, any>,
     transactionManager?: EntityManager
   ) {
+    console.log("Creating tx ---------------------")
     const referenceNumber = generateReferenceNumber();
 
     const createTransactionPayload: CreateTransactionRecordOptions = {
