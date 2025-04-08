@@ -77,14 +77,12 @@ export class ExchangeService implements OnModuleInit {
     from = from.toUpperCase();
     to = to.toUpperCase();
 
-    // Check if we have rates for the base currency
     if (!this.cachedRates[from] || this.isCacheExpired()) {
       await this.fetchAndCacheRates(from);
     }
 
     if (!this.cachedRates[from]) {
       if (from !== 'USD' && to !== 'USD') {
-        // Ensure we have USD rates
         if (!this.cachedRates['USD'] || this.isCacheExpired()) {
           await this.fetchAndCacheRates('USD');
         }
