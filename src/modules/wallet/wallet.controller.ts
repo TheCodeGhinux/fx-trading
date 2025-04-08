@@ -3,7 +3,7 @@ import { WalletService } from './wallet.service';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { User } from '../user/entities/user.entity';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
-import { FundWalletDto } from './dto/create-wallet.dto';
+import { FundWalletDto } from './dto/wallet.dto';
 
 @Controller('wallet')
 export class WalletController {

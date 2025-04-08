@@ -8,6 +8,8 @@ export enum TransactionType {
   FUND = 'fund',
   TRANSFER = 'transfer',
   TRADE = 'trade',
+  CREDIT = 'credit',
+  DEBIT = 'debit'
 }
 
 export enum TransactionStatus {

@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Wallet } from './entities/wallet.entity';
 import { EntitySchema } from 'typeorm';
 import { TransactionModule } from '../transaction/transaction.module';
+import { ExchangeModule } from '../exchange/exchange.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Wallet, EntitySchema]), TransactionModule],
+  imports: [TypeOrmModule.forFeature([Wallet, EntitySchema]), TransactionModule, ExchangeModule],
   controllers: [WalletController],
   providers: [WalletService, WalletRepository],
   exports: [WalletService, WalletRepository]

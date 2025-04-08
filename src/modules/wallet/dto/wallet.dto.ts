@@ -31,3 +31,35 @@ export class WalletDto {
   @ApiProperty({ example: '2025-04-07T12:00:00.000Z' })
   updated_at: Date;
 }
+
+export class TransferFundsDto {
+  @IsNotEmpty()
+  amount: number;
+
+  @IsNotEmpty()
+  fromWalletId: string;
+
+  @IsNotEmpty()
+  currency: string;
+
+  @IsNotEmpty()
+  accountNumber: string;
+}
+
+export class CreateTransactionDto {
+  @IsNotEmpty()
+  amount: number;
+  @IsNotEmpty()
+  currency: string;
+  @IsNotEmpty()
+  wallet_id: string;
+}
+
+export class ConvertCurrencyDto {
+  @IsNotEmpty()
+  fromCurrency: string;
+  @IsNotEmpty()
+  toCurrency: string;
+  @IsNotEmpty()
+  amount: number;
+}

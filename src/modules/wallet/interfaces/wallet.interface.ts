@@ -15,11 +15,12 @@ export interface WalletInterface {
 }
 
 
-export type WalletIdentifierType = 'id' | 'user_id';
+export type WalletIdentifierType = 'id' | 'user_id' | 'account_number';
 
 export interface WalletIdentifierMap {
   id: string;
   user_id: string;
+  account_number: string;
 };
 
 interface CreateWalletRecordPayload extends Partial<WalletInterface> {}

@@ -12,5 +12,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),],
   controllers: [ExchangeController],
   providers: [ExchangeService],
+  exports: [ExchangeService]
 })
 export class ExchangeModule {}

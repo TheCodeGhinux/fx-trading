@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
-import { WalletDto } from "src/modules/wallet/dto/create-wallet.dto";
+import { WalletDto } from "src/modules/wallet/dto/wallet.dto";
 
 
 export class VerifyEmailDto {

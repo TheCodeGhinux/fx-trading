@@ -25,6 +25,9 @@ export class Wallet extends AbstractBaseEntity {
   @Column()
   user_id: string;
 
+  @Column({ unique: true })
+  account_number: string;
+
   @Column({ type: 'enum', enum: Currency })
   currency: Currency;
 
