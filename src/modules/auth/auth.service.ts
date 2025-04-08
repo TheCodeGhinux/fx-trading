@@ -109,14 +109,13 @@ export class AuthService {
         });
 
         if (wallets.payload.length === 0) {
-          await this.walletService.repo.create({
-            createPayload: {
+          await this.walletService.createWallet(
+            {
               user_id: user.id,
-              currency: Currency.NGN,
-              balance: 0,
+              currency: Currency.NGN
             },
-            transactionOptions: { useTransaction: true, transaction: transactionManager },
-          });
+            transactionManager
+          );
         }
 
         user = await this.userService.findUserByIdentifier('id', user.id);

@@ -12,6 +12,12 @@ export class FundWalletDto {
   currency: Currency
 }
 
+export class CreateWalletDto {
+  @IsString()
+  @IsNotEmpty()
+  currency: Currency
+}
+
 export class WalletDto {
   @ApiProperty({ example: '9f04e52b-5272-4b14-b6f1-2457b0de63dc' })
   id: string;
@@ -36,11 +42,11 @@ export class TransferFundsDto {
   @IsNotEmpty()
   amount: number;
 
-  @IsNotEmpty()
-  fromWalletId: string;
+  // @IsNotEmpty()
+  // fromWalletId: string;
 
   @IsNotEmpty()
-  currency: string;
+  fromWalletCurrency: string;
 
   @IsNotEmpty()
   accountNumber: string;

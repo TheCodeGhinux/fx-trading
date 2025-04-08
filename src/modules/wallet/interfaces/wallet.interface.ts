@@ -1,17 +1,25 @@
-import { CreateRecordGeneric, UpdateRecordGeneric } from "src/common/interfaces/repository";
+import { CreateRecordGeneric, ListRecordGeneric, UpdateRecordGeneric } from "src/common/interfaces/repository";
 import { Trade } from "src/modules/trades/entities/trade.entity";
 import { Transactions } from "src/modules/transaction/entities/transaction.entity";
 import { User } from "src/modules/user/entities/user.entity";
 import { Currency } from "../entities/wallet.entity";
+import PaginationOptions from "src/common/interfaces/pagination.interface";
 
 export interface WalletInterface {
   user?: User;
-  user_id: string;
-  currency: Currency;
-  balance: number;
+  user_id?: string;
+  account_number?: string,
+  currency?: Currency;
+  balance?: number;
   transactions?: Transactions[];
   trades_from?: Trade[];
   trades_to?: Trade[];
+}
+
+export interface CreateWalletInterface {
+  user_id: string;
+  currency: Currency;
+  balance?: number;
 }
 
 
@@ -22,6 +30,11 @@ export interface WalletIdentifierMap {
   user_id: string;
   account_number: string;
 };
+
+export interface GetAllWalletsParams {
+  paginationPayload?: PaginationOptions;
+  filterRecordOptions?: Record<string, any>;
+}
 
 interface CreateWalletRecordPayload extends Partial<WalletInterface> {}
 
