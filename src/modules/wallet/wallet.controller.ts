@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
 import { WalletService } from './wallet.service';
-import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
+import { User } from '../user/entities/user.entity';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import { FundWalletDto } from './dto/wallet.dto';
 
 @Controller('wallet')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
-  @Post()
-  create(@Body() createWalletDto: CreateWalletDto) {
-    return this.walletService.create(createWalletDto);
+  @HttpCode(200)
+  @Post('fund')
+  create(@CurrentUser() user: User, @Body() payload: FundWalletDto) {
+    return this.walletService.fundWallet(user, payload);
   }
 
   @Get()

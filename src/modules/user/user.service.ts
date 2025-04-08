@@ -53,14 +53,6 @@ async findUserByIdentifier<K extends UserIdentifierType>(
     };
   }
 
-  // async getUser(id: string) {
-  //   const user = await this.findUserByIdentifier('id', id, {}, { relations: ['wallets'] })
-  //   return {
-  //     message: SYS_MSG.RESOURCE_FETCHED('User'),
-  //     data: user
-  //   }
-  // }
-
 
   async updateUser(updateData: any, id: string) {
     await this.findUserByIdentifier('id', id)

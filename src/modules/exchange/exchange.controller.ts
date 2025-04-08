@@ -2,33 +2,45 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ExchangeService } from './exchange.service';
 import { CreateExchangeDto } from './dto/create-exchange.dto';
 import { UpdateExchangeDto } from './dto/update-exchange.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CurrencyConversionDto, CurrencyConversionResultDto } from './dto/currency-conversion.dto';
 
 @Controller('exchange')
 export class ExchangeController {
   constructor(private readonly exchangeService: ExchangeService) {}
 
-  @Post()
-  create(@Body() createExchangeDto: CreateExchangeDto) {
-    return this.exchangeService.create(createExchangeDto);
-  }
-
   @Get()
-  findAll() {
-    return this.exchangeService.findAll();
+  async getAllRates() {
+    const rates = await this.exchangeService.getAllRates();
+    return {
+      rates,
+      lastUpdated: this.exchangeService.getLastUpdated(),
+    };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.exchangeService.findOne(+id);
+  @Get(':fromCurrency/:toCurrency')
+  async getRate(@Param('fromCurrency') fromCurrency: string, @Param('toCurrency') toCurrency: string) {
+    const rate = await this.exchangeService.getRate(fromCurrency, toCurrency);
+    return {
+      from: fromCurrency.toUpperCase(),
+      to: toCurrency.toUpperCase(),
+      rate,
+      lastUpdated: this.exchangeService.getLastUpdated(),
+    };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExchangeDto: UpdateExchangeDto) {
-    return this.exchangeService.update(+id, updateExchangeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.exchangeService.remove(+id);
+  @Post('convert')
+  @ApiOperation({ summary: 'Convert amount from one currency to another' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the converted amount',
+    type: CurrencyConversionResultDto
+  })
+  async convertCurrency(@Body() conversionDto: CurrencyConversionDto) {
+    return this.exchangeService.convertCurrency(
+      conversionDto.from,
+      conversionDto.to,
+      conversionDto.amount
+    );
   }
 }

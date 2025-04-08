@@ -1,4 +1,5 @@
 export const USER_LOGIN_SUCCESSFULLY = 'User logged in successfully';
+export const WALLET_FUNDED = 'Wallet funded succesfully';
 export const USER_CREATION_FAILED = 'User creation failed';
 export const USER_NOT_AUTHORIZED =
   'User is not authorized to perform this action';
@@ -54,6 +55,13 @@ export const RESOURCE_DELETED = (resource: string, id?: string) => {
   return `${resource} deleted successfully `;
 };
 
+export const RESOURCE_SUCESS = (resource: string, action: string, id?: string) => {
+  if (id) {
+    return `${resource} ${action} successfully `;
+  }
+  return `${resource} ${action} successfully `;
+};
+
 export const AUTH_TOKEN_INVALID = 'Invalid authentication token';
 export const AUTH_TOKEN_EXPIRED = 'Expired authentication token';
 export const USER_NOT_AUTHENTICATED =
@@ -65,6 +73,5 @@ export const LOGIN_ERROR = 'An error occurred during login';
 export const INVALID_LOGIN_CREDENTIALS = 'Invalid Email or Password';
 
 export const INVALID_PARAMETER = (param: string) => `${param} is required`;
-export const RESOURCE_NOT_FOUND = (resource: string) => `${resource} not found`;
 export const FORBIDDEN_ACTION = 'Access to this resource is forbidden';
 

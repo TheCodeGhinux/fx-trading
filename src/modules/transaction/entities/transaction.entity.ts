@@ -3,6 +3,24 @@ import { User } from "src/modules/user/entities/user.entity";
 import { Wallet } from "src/modules/wallet/entities/wallet.entity";
 import { Entity, ManyToOne, JoinColumn, Column } from "typeorm";
 
+
+export enum TransactionType {
+  FUND = 'fund',
+  TRANSFER = 'transfer',
+  TRADE = 'trade',
+  CREDIT = 'credit',
+  DEBIT = 'debit'
+}
+
+export enum TransactionStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
+export enum TransactionStatus {
+
+}
 @Entity('transactions')
 export class Transactions extends AbstractBaseEntity {
   @ManyToOne(() => User, user => user.transactions)
@@ -19,8 +37,8 @@ export class Transactions extends AbstractBaseEntity {
   @Column()
   wallet_id: string;
 
-  @Column()
-  type: 'fund' | 'transfer' | 'trade';
+  @Column({type: 'enum', enum: TransactionType })
+  type: TransactionType;
 
   @Column({ type: 'decimal', precision: 18, scale: 2 })
   amount: number;
@@ -28,8 +46,11 @@ export class Transactions extends AbstractBaseEntity {
   @Column()
   currency: string;
 
-  @Column()
-  status: 'pending' | 'completed' | 'failed';
+  @Column({nullable: true})
+  rate_used?: string;
+
+  @Column({ type: 'enum', enum: TransactionStatus })
+  status: TransactionStatus;
 
   @Column({ unique: true })
   reference: string;
