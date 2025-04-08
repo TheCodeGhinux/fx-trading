@@ -44,6 +44,9 @@ export class Transactions extends AbstractBaseEntity {
   @Column()
   currency: string;
 
+  @Column({nullable: true})
+  rate_used?: string;
+
   @Column({ type: 'enum', enum: TransactionStatus })
   status: TransactionStatus;
 

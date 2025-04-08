@@ -55,6 +55,13 @@ export const RESOURCE_DELETED = (resource: string, id?: string) => {
   return `${resource} deleted successfully `;
 };
 
+export const RESOURCE_SUCESS = (resource: string, action: string, id?: string) => {
+  if (id) {
+    return `${resource} ${action} successfully `;
+  }
+  return `${resource} ${action} successfully `;
+};
+
 export const AUTH_TOKEN_INVALID = 'Invalid authentication token';
 export const AUTH_TOKEN_EXPIRED = 'Expired authentication token';
 export const USER_NOT_AUTHENTICATED =

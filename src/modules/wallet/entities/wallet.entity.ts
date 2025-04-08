@@ -2,7 +2,7 @@ import { AbstractBaseEntity } from "src/entities/base.entity";
 import { Trade } from "src/modules/trades/entities/trade.entity";
 import { Transactions } from "src/modules/transaction/entities/transaction.entity";
 import { User } from "src/modules/user/entities/user.entity";
-import { Entity, ManyToOne, JoinColumn, Column, OneToMany } from "typeorm";
+import { Entity, ManyToOne, JoinColumn, Column, OneToMany, Unique } from "typeorm";
 
 export enum Currency {
   NGN = 'NGN',
@@ -16,6 +16,7 @@ export enum Currency {
 }
 
 @Entity('wallets')
+@Unique(['user_id', 'currency'])
 export class Wallet extends AbstractBaseEntity {
   @ManyToOne(() => User, user => user.wallets)
   @JoinColumn({ name: 'user_id' })
