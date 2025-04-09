@@ -8,9 +8,10 @@ import { EntitySchema } from 'typeorm';
 import { TransactionModule } from '../transaction/transaction.module';
 import { ExchangeModule } from '../exchange/exchange.module';
 import { UserModule } from '../user/user.module';
+import { TradesModule } from '../trades/trades.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Wallet, EntitySchema]), TransactionModule, ExchangeModule, UserModule],
+  imports: [TypeOrmModule.forFeature([Wallet, EntitySchema]), TransactionModule, ExchangeModule, UserModule, TradesModule],
   controllers: [WalletController],
   providers: [WalletService, WalletRepository],
   exports: [WalletService, WalletRepository]

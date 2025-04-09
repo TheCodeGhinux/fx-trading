@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TradesService } from './trades.service';
 import { TradesController } from './trades.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +13,7 @@ import { TradeRepository } from './repositories/trade.repository';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Trade, EntitySchema]),
-    UserModule, WalletModule, ExchangeModule, TransactionModule
+    UserModule, forwardRef(() => WalletModule), ExchangeModule, TransactionModule
   ],
   controllers: [TradesController],
   providers: [TradesService, TradeRepository],

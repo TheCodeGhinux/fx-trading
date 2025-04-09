@@ -16,6 +16,7 @@ import { TokenService } from './common/token.service';
 import { JwtService } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { EmailModule } from './modules/email/email.module';
 import config from "./config/configuration";
 
 @Module({
@@ -36,7 +37,7 @@ import config from "./config/configuration";
       return dataSource;
     },
   }),
-  AuthModule, UserModule, WalletModule, TransactionModule, TradesModule, ExchangeModule],
+  AuthModule, UserModule, WalletModule, TransactionModule, TradesModule, ExchangeModule, EmailModule],
   controllers: [AppController],
   providers: [
     AppService,

@@ -5,7 +5,7 @@ import { UpdateExchangeDto } from './dto/update-exchange.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CurrencyConversionDto, CurrencyConversionResultDto } from './dto/currency-conversion.dto';
 
-@Controller('exchange')
+@Controller('fx')
 export class ExchangeController {
   constructor(private readonly exchangeService: ExchangeService) {}
 
