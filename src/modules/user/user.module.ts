@@ -8,9 +8,10 @@ import { User } from './entities/user.entity';
 import { OtpService } from '../auth/otp.service';
 import { OtpRepository } from './repositories/otp.repository';
 import { Otp } from './entities/otp.entity';
+import { EmailModule } from '../email/email.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Otp, EntitySchema])],
+  imports: [TypeOrmModule.forFeature([User, Otp, EntitySchema]), EmailModule],
   controllers: [UserController],
   providers: [UserService, UserRepository, OtpService, OtpRepository],
   exports: [UserService, OtpService]

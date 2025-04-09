@@ -2,14 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TradesService } from './trades.service';
 import { CreateTradeDto } from './dto/create-trade.dto';
 import { UpdateTradeDto } from './dto/update-trade.dto';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
+import { User } from '../user/entities/user.entity';
 
 @Controller('trades')
 export class TradesController {
   constructor(private readonly tradesService: TradesService) {}
 
   @Post()
-  create(@Body() createTradeDto: CreateTradeDto) {
-    return this.tradesService.create(createTradeDto);
+  create(@CurrentUser() user: User, @Body() createTradeDto: CreateTradeDto) {
+    return this.tradesService.executeTrade(user, createTradeDto);
   }
 
   @Get()

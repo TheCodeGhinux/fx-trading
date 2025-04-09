@@ -6,16 +6,23 @@ import { CurrentUser } from 'src/decorators/current-user.decorator';
 import { CreateWalletDto, FundWalletDto, TransferFundsDto } from './dto/wallet.dto';
 import PaginationValidator from 'src/common/pagination.validator';
 import { Currency } from './entities/wallet.entity';
+import { CreateTradeDto } from '../trades/dto/create-trade.dto';
+import { TradesService } from '../trades/trades.service';
 
 @Controller('wallet')
 export class WalletController {
-  constructor(private readonly walletService: WalletService) {}
+  constructor(private readonly walletService: WalletService, private readonly tradesService: TradesService) {}
 
   @HttpCode(200)
   @Post('')
   create(@CurrentUser() user: User, @Body() payload: CreateWalletDto) {
     return this.walletService.createUserWallet(user, payload);
   }
+
+    @Post('/convert')
+    convertCurrency(@CurrentUser() user: User, @Body() createTradeDto: CreateTradeDto) {
+      return this.tradesService.executeTrade(user, createTradeDto);
+    }
 
   @HttpCode(200)
   @Post('fund')
